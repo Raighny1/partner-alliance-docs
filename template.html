@@ -1,0 +1,306 @@
+<title>ASUS Partner Alliance — 公開規格文件</title>
+<style>
+  :root {
+    --bg: #f6f6f4;
+    --surface: #ffffff;
+    --surface-2: #eef0ef;
+    --text: #1d1d1f;
+    --text-muted: #63666f;
+    --border: #dfe1de;
+    --accent: #0060c9;
+    --accent-soft: #e8f0fc;
+    --panel-head: #1d1d1f;
+    --panel-head-text: #ffffff;
+    --code-bg: #f0f0ee;
+    --shadow: 0 1px 2px rgba(20, 20, 20, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16171a;
+      --surface: #1e2024;
+      --surface-2: #26282d;
+      --text: #edeef0;
+      --text-muted: #9a9da6;
+      --border: #34363c;
+      --accent: #5b9bf2;
+      --accent-soft: #1c2b3f;
+      --panel-head: #0e0f11;
+      --panel-head-text: #f2f2f2;
+      --code-bg: #26282d;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16171a; --surface: #1e2024; --surface-2: #26282d; --text: #edeef0;
+    --text-muted: #9a9da6; --border: #34363c; --accent: #5b9bf2; --accent-soft: #1c2b3f;
+    --panel-head: #0e0f11; --panel-head-text: #f2f2f2; --code-bg: #26282d;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f6f4; --surface: #ffffff; --surface-2: #eef0ef; --text: #1d1d1f;
+    --text-muted: #63666f; --border: #dfe1de; --accent: #0060c9; --accent-soft: #e8f0fc;
+    --panel-head: #1d1d1f; --panel-head-text: #ffffff; --code-bg: #f0f0ee;
+    --shadow: 0 1px 2px rgba(20, 20, 20, 0.05);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+    font-size: 15.5px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .shell { display: flex; min-height: 100vh; align-items: flex-start; }
+
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 268px;
+    flex: 0 0 268px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 28px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    overflow-y: auto;
+  }
+  .brand-kicker {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  .brand-title {
+    font-size: 19px;
+    font-weight: 700;
+    text-wrap: balance;
+    line-height: 1.35;
+  }
+  .sync-badge {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .sync-badge strong { color: var(--text); font-weight: 600; }
+  .sync-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #2e9e5b; margin-right: 6px; }
+
+  .nav-group { display: flex; flex-direction: column; gap: 2px; }
+  .nav-eyebrow { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 4px 0 6px; font-weight: 600; }
+  .nav-link {
+    color: var(--text);
+    font-size: 13.5px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    line-height: 1.4;
+  }
+  .nav-link:hover { background: var(--surface-2); text-decoration: none; }
+  .nav-link.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+
+  .source-note { margin-top: auto; font-size: 11.5px; color: var(--text-muted); line-height: 1.6; }
+
+  .main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+    padding: 48px 32px 120px;
+  }
+  .content { max-width: 760px; width: 100%; }
+
+  .intro {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow);
+  }
+  .intro h2 { margin: 0 0 8px; font-size: 16px; }
+  .intro p { margin: 0; color: var(--text-muted); font-size: 13.5px; }
+
+  section.doc { margin-bottom: 72px; scroll-margin-top: 24px; }
+  .doc-kicker {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .doc-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 28px;
+    text-wrap: balance;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 16px;
+  }
+
+  .doc-body h2 {
+    font-size: 19px;
+    font-weight: 700;
+    margin: 40px 0 14px;
+    padding-top: 4px;
+  }
+  .doc-body h3 { font-size: 16px; font-weight: 700; margin: 28px 0 12px; }
+  .doc-body h4 { font-size: 14px; font-weight: 700; margin: 20px 0 10px; color: var(--text-muted); }
+  .doc-body p { margin: 0 0 14px; }
+  .doc-body ul, .doc-body ol { margin: 0 0 14px; padding-left: 22px; }
+  .doc-body li { margin-bottom: 4px; }
+  .doc-body hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  .doc-body strong { font-weight: 700; }
+  .doc-body code {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    background: var(--code-bg);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 0.92em;
+  }
+  .doc-body pre {
+    background: var(--code-bg);
+    border-radius: 8px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 13px;
+  }
+  .doc-body pre code { background: none; padding: 0; }
+
+  .table-scroll { overflow-x: auto; margin: 18px 0; border: 1px solid var(--border); border-radius: 10px; }
+  .doc-body table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 13.5px;
+    background: var(--surface);
+  }
+  .doc-body table :is(th, td) {
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    padding: 9px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  .doc-body table :is(th, td):last-child { border-right: none; }
+  .doc-body table tr:last-child :is(th, td) { border-bottom: none; }
+  .doc-body table th {
+    background: var(--surface-2);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .doc-body table p { margin: 0; }
+  .doc-body table p + p { margin-top: 6px; }
+
+  .cf-panel {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px 0;
+    background: var(--surface);
+  }
+  .cf-panel-title {
+    background: var(--panel-head);
+    color: var(--panel-head-text);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 10px 14px;
+  }
+  .cf-panel-body { padding: 14px 16px; overflow-x: auto; }
+  .cf-panel-body table { margin: 0; }
+
+  .cf-image-placeholder {
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    color: var(--text-muted);
+    font-size: 13px;
+    background: var(--surface-2);
+    margin: 12px 0;
+  }
+  .cf-user { color: var(--text-muted); }
+
+  @media (max-width: 860px) {
+    .shell { flex-direction: column; }
+    .sidebar {
+      position: relative;
+      width: 100%;
+      height: auto;
+      flex: none;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      flex-direction: row;
+      align-items: center;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 16px 18px;
+    }
+    .sidebar > * { flex: none; }
+    .source-note { display: none; }
+    .main { padding: 32px 18px 90px; }
+  }
+</style>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div>
+      <div class="brand-kicker">ASUS · Partner Alliance</div>
+      <div class="brand-title">公開規格文件</div>
+    </div>
+    <div class="sync-badge">
+      <span><span class="sync-dot"></span><strong>與 Confluence 同步</strong></span>
+      <span>最後同步：{{STAMP}}（GMT+8）</span>
+    </div>
+    <nav class="nav-group">
+      <div class="nav-eyebrow">文件目錄</div>
+      {{NAV}}
+    </nav>
+    <div class="source-note">此頁面內容每日自動從 Confluence 抓取並重新發布，僅供合作夥伴唯讀參考，如需最新討論請聯繫 ASUS 專案負責人。</div>
+  </aside>
+
+  <main class="main">
+    <div class="content">
+      <div class="intro">
+        <h2>ASUS Partner Alliance — 系統規格（公開唯讀版）</h2>
+        <p>本文件彙整系統概述、前臺與後臺功能規格，內容與內部 Confluence 文件定期同步。若段落中出現「📎 圖片參考」標示，代表原文件含設計稿截圖，僅存於內部 Confluence 附件。</p>
+      </div>
+      {{SECTIONS}}
+    </div>
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.doc-body table').forEach(function (t) {
+    var wrap = document.createElement('div');
+    wrap.className = 'table-scroll';
+    t.parentNode.insertBefore(wrap, t);
+    wrap.appendChild(t);
+  });
+
+  var links = Array.from(document.querySelectorAll('.nav-link'));
+  var sections = links.map(function (l) { return document.getElementById(l.getAttribute('data-anchor')); });
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      var link = links[sections.indexOf(entry.target)];
+      if (!link) return;
+      if (entry.isIntersecting) {
+        links.forEach(function (l) { l.classList.remove('active'); });
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-10% 0px -80% 0px' });
+  sections.forEach(function (s) { if (s) observer.observe(s); });
+</script>
