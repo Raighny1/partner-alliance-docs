@@ -3,7 +3,24 @@ export function convertConfluenceStorage(html, titleAnchorMap = {}) {
   html = stripLayout(html);
   html = convertPanels(html);
   html = convertMisc(html, titleAnchorMap);
+  html = fixMissingTextColor(html);
   return html;
+}
+
+// Confluence authors rely on Confluence's own light-mode default (black text) and only set an
+// explicit `color` when a cell has a dark background. Cells with a pastel background and no
+// explicit color inherit this site's theme text color, which goes near-white in dark mode and
+// becomes invisible. Force a fixed dark, readable color on any inline style that sets a
+// background but no color, so these Confluence-authored pastel cells render correctly regardless
+// of the page's light/dark theme.
+function fixMissingTextColor(html) {
+  return html.replace(/style="([^"]*)"/g, (match, style) => {
+    const hasBg = /background(-color)?\s*:/.test(style);
+    const hasColor = /(?:^|;)\s*color\s*:/.test(style);
+    if (!hasBg || hasColor) return match;
+    const sep = style.trim() === '' || style.trim().endsWith(';') ? '' : ';';
+    return `style="${style}${sep}color:#1d1d1f;"`;
+  });
 }
 
 function stripLayout(html) {
