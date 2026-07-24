@@ -18,7 +18,8 @@ const stamp = now.toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: fal
 
 const sections = PAGES.map((p) => {
   const raw = fs.readFileSync(path.join(DIR, 'raw', p.file), 'utf8');
-  const converted = convertConfluenceStorage(raw, titleAnchorMap);
+  const imgDir = fs.existsSync(path.join(DIR, 'assets', 'images', p.anchor)) ? `assets/images/${p.anchor}` : '';
+  const converted = convertConfluenceStorage(raw, titleAnchorMap, imgDir);
   return `<section class="doc" id="${p.anchor}">
     <div class="doc-kicker">規格文件 · ${p.key}</div>
     <h1 class="doc-title">${p.title}</h1>
