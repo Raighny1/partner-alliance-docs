@@ -10,18 +10,30 @@ export function convertConfluenceStorage(html, titleAnchorMap = {}, imgDir = '')
 }
 
 // Confluence authors rely on Confluence's own light-mode default (black text) and only set an
-// explicit `color` when a cell has a dark background. Cells with a pastel background and no
-// explicit color inherit this site's theme text color, which goes near-white in dark mode and
-// becomes invisible. Force a fixed dark, readable color on any inline style that sets a
-// background but no color, so these Confluence-authored pastel cells render correctly regardless
-// of the page's light/dark theme.
+// explicit `color` when a cell has a dark background. Two mismatches result when this HTML is
+// dropped onto our own light/dark-aware theme instead of Confluence's:
+// 1. A pastel background with no explicit color inherits this site's theme text color, which
+//    goes near-white in dark mode and becomes invisible on the light pastel. Force a fixed dark,
+//    readable color in this case.
+// 2. An explicit `color:var(--ds-text-accent-gray,#44546f)`-style annotation color with NO
+//    background assumes it's sitting on Confluence's light page background. Here it sits on our
+//    theme's surface color instead, so in dark mode a dark fallback color becomes unreadable.
+//    Strip the color declaration in this case and let our theme-aware `color: var(--text)` (set
+//    on <body>) take over, which is correct in both themes.
 function fixMissingTextColor(html) {
   return html.replace(/style="([^"]*)"/g, (match, style) => {
-    const hasBg = /background(-color)?\s*:/.test(style);
-    const hasColor = /(?:^|;)\s*color\s*:/.test(style);
-    if (!hasBg || hasColor) return match;
-    const sep = style.trim() === '' || style.trim().endsWith(';') ? '' : ';';
-    return `style="${style}${sep}color:#1d1d1f;"`;
+    const decls = style.split(';').map((s) => s.trim()).filter(Boolean);
+    const hasBg = decls.some((d) => /^background(-color)?\s*:/i.test(d));
+    const hasColor = decls.some((d) => /^color\s*:/i.test(d));
+    if (hasBg && !hasColor) {
+      decls.push('color:#1d1d1f');
+      return `style="${decls.join('; ')};"`;
+    }
+    if (!hasBg && hasColor) {
+      const filtered = decls.filter((d) => !/^color\s*:/i.test(d));
+      return filtered.length ? `style="${filtered.join('; ')};"` : '';
+    }
+    return match;
   });
 }
 
